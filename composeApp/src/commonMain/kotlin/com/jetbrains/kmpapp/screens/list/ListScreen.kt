@@ -1,5 +1,6 @@
 package com.jetbrains.kmpapp.screens.list
 
+import HymnObject
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,7 +30,6 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.jetbrains.kmpapp.data.MuseumObject
 import com.jetbrains.kmpapp.screens.EmptyScreenContent
 import com.jetbrains.kmpapp.screens.detail.DetailScreen
 import io.kamel.image.KamelImage
@@ -47,8 +47,8 @@ data object ListScreen : Screen {
             if (objectsAvailable) {
                 ObjectGrid(
                     objects = objects,
-                    onObjectClick = { objectId ->
-                        navigator.push(DetailScreen(objectId))
+                    onObjectClick = { objectID ->
+                        navigator.push(DetailScreen(objectID))
                     }
                 )
             } else {
@@ -60,7 +60,7 @@ data object ListScreen : Screen {
 
 @Composable
 private fun ObjectGrid(
-    objects: List<MuseumObject>,
+    objects: List<HymnObject>,
     onObjectClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -81,7 +81,7 @@ private fun ObjectGrid(
 
 @Composable
 private fun ObjectFrame(
-    obj: MuseumObject,
+    obj: HymnObject,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -91,7 +91,7 @@ private fun ObjectFrame(
             .clickable { onClick() }
     ) {
         KamelImage(
-            resource = asyncPainterResource(data = obj.primaryImageSmall),
+            resource = asyncPainterResource(data = obj.url),
             contentDescription = obj.title,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -103,7 +103,7 @@ private fun ObjectFrame(
         Spacer(Modifier.height(2.dp))
 
         Text(obj.title, style = MaterialTheme.typography.subtitle1.copy(fontWeight = FontWeight.Bold))
-        Text(obj.artistDisplayName, style = MaterialTheme.typography.body2)
-        Text(obj.objectDate, style = MaterialTheme.typography.caption)
+        Text(obj.author, style = MaterialTheme.typography.body2)
+        Text(obj.year.toString(), style = MaterialTheme.typography.caption)
     }
 }

@@ -1,11 +1,11 @@
 package com.jetbrains.kmpapp.screens.detail
 
+import HymnObject
 import cafe.adriel.voyager.core.model.ScreenModel
-import com.jetbrains.kmpapp.data.MuseumObject
-import com.jetbrains.kmpapp.data.MuseumRepository
+import com.jetbrains.kmpapp.data.HymnRepository
 import kotlinx.coroutines.flow.Flow
 
-class DetailScreenModel(private val museumRepository: MuseumRepository) : ScreenModel {
-    fun getObject(objectId: Int): Flow<MuseumObject?> =
-        museumRepository.getObjectById(objectId)
+class DetailScreenModel(private val hymnRepository: HymnRepository) : ScreenModel {
+    fun getObject(objectID: Int): Flow<HymnObject?> =
+        hymnRepository.getObjectById(objectID)
 }

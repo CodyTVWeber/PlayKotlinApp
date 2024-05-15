@@ -1,10 +1,11 @@
 package com.jetbrains.kmpapp.di
 
-import com.jetbrains.kmpapp.data.InMemoryMuseumStorage
-import com.jetbrains.kmpapp.data.KtorMuseumApi
-import com.jetbrains.kmpapp.data.MuseumApi
-import com.jetbrains.kmpapp.data.MuseumRepository
-import com.jetbrains.kmpapp.data.MuseumStorage
+import com.jetbrains.kmpapp.data.InMemoryHymnStorage
+
+import com.jetbrains.kmpapp.data.KtorHymnApi
+import com.jetbrains.kmpapp.data.HymnApi
+import com.jetbrains.kmpapp.data.HymnRepository
+import com.jetbrains.kmpapp.data.HymnStorage
 import com.jetbrains.kmpapp.screens.detail.DetailScreenModel
 import com.jetbrains.kmpapp.screens.list.ListScreenModel
 import io.ktor.client.HttpClient
@@ -27,10 +28,10 @@ val dataModule = module {
         }
     }
 
-    single<MuseumApi> { KtorMuseumApi(get()) }
-    single<MuseumStorage> { InMemoryMuseumStorage() }
+    single<HymnApi> { KtorHymnApi(get()) }
+    single<HymnStorage> { InMemoryHymnStorage() }
     single {
-        MuseumRepository(get(), get()).apply {
+        HymnRepository(get(), get()).apply {
             initialize()
         }
     }

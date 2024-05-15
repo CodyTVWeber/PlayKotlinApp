@@ -1,5 +1,6 @@
 package com.jetbrains.kmpapp.screens.detail
 
+import HymnObject
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -34,30 +35,27 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import com.jetbrains.kmpapp.data.MuseumObject
 import com.jetbrains.kmpapp.screens.EmptyScreenContent
 import io.kamel.image.KamelImage
 import io.kamel.image.asyncPainterResource
 import kmp_app_template.composeapp.generated.resources.Res
 import kmp_app_template.composeapp.generated.resources.back
-import kmp_app_template.composeapp.generated.resources.label_artist
-import kmp_app_template.composeapp.generated.resources.label_credits
-import kmp_app_template.composeapp.generated.resources.label_date
-import kmp_app_template.composeapp.generated.resources.label_department
-import kmp_app_template.composeapp.generated.resources.label_dimensions
-import kmp_app_template.composeapp.generated.resources.label_medium
-import kmp_app_template.composeapp.generated.resources.label_repository
+import kmp_app_template.composeapp.generated.resources.label_author
+import kmp_app_template.composeapp.generated.resources.label_year
+import kmp_app_template.composeapp.generated.resources.label_lyrics
+import kmp_app_template.composeapp.generated.resources.label_tune
+import kmp_app_template.composeapp.generated.resources.label_meter
 import kmp_app_template.composeapp.generated.resources.label_title
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.stringResource
 
-data class DetailScreen(val objectId: Int) : Screen {
+data class DetailScreen(val objectID: Int) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
         val screenModel: DetailScreenModel = getScreenModel()
 
-        val obj by screenModel.getObject(objectId).collectAsState(initial = null)
+        val obj by screenModel.getObject(objectID).collectAsState(initial = null)
         AnimatedContent(obj != null) { objectAvailable ->
             if (objectAvailable) {
                 ObjectDetails(obj!!, onBackClick = { navigator.pop() })
@@ -71,7 +69,7 @@ data class DetailScreen(val objectId: Int) : Screen {
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 private fun ObjectDetails(
-    obj: MuseumObject,
+    obj: HymnObject,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -91,7 +89,7 @@ private fun ObjectDetails(
                 .padding(paddingValues)
         ) {
             KamelImage(
-                resource = asyncPainterResource(data = obj.primaryImageSmall),
+                resource = asyncPainterResource(data = obj.url),
                 contentDescription = obj.title,
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
@@ -104,13 +102,11 @@ private fun ObjectDetails(
                     Text(obj.title, style = MaterialTheme.typography.h6.copy(fontWeight = FontWeight.Bold))
                     Spacer(Modifier.height(6.dp))
                     LabeledInfo(stringResource(Res.string.label_title), obj.title)
-                    LabeledInfo(stringResource(Res.string.label_artist), obj.artistDisplayName)
-                    LabeledInfo(stringResource(Res.string.label_date), obj.objectDate)
-                    LabeledInfo(stringResource(Res.string.label_dimensions), obj.dimensions)
-                    LabeledInfo(stringResource(Res.string.label_medium), obj.medium)
-                    LabeledInfo(stringResource(Res.string.label_department), obj.department)
-                    LabeledInfo(stringResource(Res.string.label_repository), obj.repository)
-                    LabeledInfo(stringResource(Res.string.label_credits), obj.creditLine)
+                    LabeledInfo(stringResource(Res.string.label_author), obj.author)
+                    LabeledInfo(stringResource(Res.string.label_year), obj.year.toString())
+                    LabeledInfo(stringResource(Res.string.label_tune), obj.tune)
+                    LabeledInfo(stringResource(Res.string.label_meter), obj.meter)
+                    LabeledInfo(stringResource(Res.string.label_lyrics), obj.lyrics.reduce { acc, s -> "$acc\n$s" })
                 }
             }
         }
